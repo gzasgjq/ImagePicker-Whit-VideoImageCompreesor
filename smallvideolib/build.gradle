@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_CPP_FEATURES=rtti exceptions",
+                        "-DANDROID_TOOLCHAIN=clang",
+                        "-DANDROID_PLATFORM=android-17",
+//                        "-DANDROID_ABI=armeabi-v7a",
+                        "-DANDROID_STL=gnustl_static",
+                        "-DANDROID_ARM_MODE=arm",
+                        "-DANDROID_ARM_NEON=TRUE"
+//                cppFlags "-std=c++11"
+            }
+        }
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+}

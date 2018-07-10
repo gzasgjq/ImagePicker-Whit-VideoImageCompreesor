@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_home_recycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RecycleView"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_home_websocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WebSocket"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_home_crop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CropVideo"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_home_pllax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TestHome"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_home_scroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DemoScroll"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_get_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GetInfo"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_face"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Face"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_wechat_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="PreviewDemo"/>
+
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/phone_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</ScrollView>

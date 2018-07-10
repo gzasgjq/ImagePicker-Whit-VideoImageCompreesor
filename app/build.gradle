@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.demo.gjq.testdemo"
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [
+                XG_ACCESS_ID : "2100282283",
+                XG_ACCESS_KEY: "A35NK7T77SXC",
+        ]
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
+//                abiFilters "armeabi-v7a", "armeabi", "arm64-v8a"
+        }
+    }
+
+    packagingOptions {
+//        exclude '**/arm64-v8a/**'
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'cn.bingoogolapple:bga-baseadapter:1.2.9@aar'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    implementation 'com.google.code.gson:gson:2.7'
+    implementation 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.lzy.net:okrx2:2.0.2'
+    implementation 'com.lzy.net:okserver:2.0.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.6.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    implementation('com.github.bumptech.glide:glide:4.5.0') {
+        //去掉glide依赖的support包，使用和酷蚪一样的support版本
+        exclude group: "com.android.support"
+    }
+    implementation('com.github.bumptech.glide:compiler:4.5.0') {
+        //去掉glide依赖的support包，使用和酷蚪一样的support版本
+        exclude group: "com.android.support"
+    }
+    implementation('com.github.bumptech.glide:okhttp3-integration:4.5.0') {
+        //去掉glide依赖的support包，使用和酷蚪一样的support版本
+        exclude group: "com.android.support"
+    }
+    implementation 'com.android.support:support-v4:26.0.0-beta1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'com.dhh:websocket2:1.5.0'
+    implementation 'com.dhh:rxlifecycle2:1.6'
+    implementation project(':cropvideo')
+    implementation project(':smallvideolib')
+
+    implementation 'com.tencent.xinge:xinge:3.2.2-release'
+    //wup包
+    implementation 'com.tencent.wup:wup:1.0.0.E-release'
+    //mid包
+    implementation 'com.tencent.mid:mid:4.0.6-release'
+
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.15'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
+}
+
+//apply plugin: 'kotlin-android-extensions'
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="true"
+    android:transitionName="video"
+    app:cardUseCompatPadding="true">
+
+    <ImageView
+        android:id="@+id/img_item_full"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@color/c919191"/>
+
+    <TextView
+        android:id="@+id/tv_item_full"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:ellipsize="start"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="1"
+        android:textSize="20sp"/>
+</android.support.v7.widget.CardView>
