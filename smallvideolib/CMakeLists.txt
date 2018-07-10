@@ -19,20 +19,13 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-              src/main/cpp/jx_yuv_encode_h264.cpp
-              src/main/cpp/jx_pcm_encode_aac.cpp
-              src/main/cpp/jx_media_muxer.cpp
-              src/main/cpp/jx_jni_handler.cpp
               src/main/cpp/jx_ffmpeg_thread.c
-              src/main/cpp/jx_ffmpeg_jni.cpp
-              src/main/cpp/threadsafe_queue.cpp
               src/main/cpp/jx_log.cpp
               src/main/cpp/cmdutils.c
               src/main/cpp/ffmpeg.c
               src/main/cpp/ffmpeg_filter.c
               src/main/cpp/ffmpeg_opt.c
               src/main/cpp/jx_ffmpeg_cmd_run.c
-              src/main/cpp/jx_ffmpeg_config.cpp
              )
 
 add_library(
@@ -46,7 +39,6 @@ add_library(
             SHARED
             IMPORTED
              )
-
 
 add_library(
             avformat

@@ -61,14 +61,6 @@ public class FFmpegBridge {
      */
     public final static int ROTATE_270_CROP_LT_MIRROR_LR = 3;
 
-
-    /**
-     * @return 返回ffmpeg的编译信息
-     */
-    public static native String getFFmpegConfig();
-
-    public static native String getFFmpegCodevConfig();
-
     /**
      * 命令形式运行ffmpeg
      *
@@ -78,30 +70,6 @@ public class FFmpegBridge {
     public static native int jxCMDRun(String cmd[]);
 
     /**
-     * 编码一帧视频，暂时只能编码yv12视频
-     *
-     * @param data
-     * @return
-     */
-    public static native int encodeFrame2H264(byte[] data);
-
-
-    /**
-     * 编码一帧音频,暂时只能编码pcm音频
-     *
-     * @param data
-     * @return
-     */
-    public static native int encodeFrame2AAC(byte[] data);
-
-    /**
-     * 录制结束
-     *
-     * @return
-     */
-    public static native int recordEnd();
-
-    /**
      * 初始化
      *
      * @param debug
@@ -109,25 +77,7 @@ public class FFmpegBridge {
      */
     public static native void initJXFFmpeg(boolean debug, String logUrl);
 
-
-    public static native void nativeRelease();
-
     public static native void jxCMDExit();
-
-    /**
-     * @param mediaBasePath 视频存放目录
-     * @param mediaName     视频名称
-     * @param filter        旋转镜像剪切处理
-     * @param in_width      输入视频宽度
-     * @param in_height     输入视频高度
-     * @param out_height    输出视频高度
-     * @param out_width     输出视频宽度
-     * @param frameRate     视频帧率
-     * @param bit_rate      视频比特率
-     * @return
-     */
-    public static native int prepareJXFFmpegEncoder(String mediaBasePath, String mediaName, int filter, int in_width, int in_height, int out_width, int out_height, int frameRate, long bit_rate);
-
 
     /**
      * 命令形式执行
