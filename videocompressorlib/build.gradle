@@ -8,12 +8,12 @@ ext {
     artifact = 'videocompressorlib'
 
     libraryDescription = 'A Video Compresser use FFmpeg on Android'
-    libraryVersionDescription = '添加自定义输出路径功能'
+    libraryVersionDescription = '添加自定义Log日志路径功能'
 
     siteUrl = 'https://github.com/gzasgjq/TestDemo/tree/Sim'
     gitUrl = 'https://github.com/gzasgjq/TestDemo.git'
 
-    libraryVersion = '0.2'
+    libraryVersion = '0.3'
 
     developerId = 'gzasgjq'
     developerName = 'Nin Jacky'

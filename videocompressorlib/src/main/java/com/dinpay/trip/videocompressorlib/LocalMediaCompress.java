@@ -162,7 +162,7 @@ public class LocalMediaCompress extends MediaRecorderBase {
         if (scale > 1) {
             scaleWH = getScaleWH(mNeedCompressVideo, scale);
         }
-        doCompressAsyn(true, new FFmpegBridge.OnExecListener() {
+        doCompressAsyn(videoOutputAddress, new FFmpegBridge.OnExecListener() {
             @Override
             public void onExecuted(int ret) {
                 onExecListener.onOver(ret, mMediaObject);
@@ -190,7 +190,7 @@ public class LocalMediaCompress extends MediaRecorderBase {
             scaleWH = getScaleWH(mNeedCompressVideo, scale);
         }
 
-        boolean b = doCompress(true);
+        boolean b = doCompress(true, videoOutputAddress);
         mOnlyCompressOverBean.setSucceed(b);
 
         if (b) {

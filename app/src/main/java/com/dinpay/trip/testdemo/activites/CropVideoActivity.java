@@ -291,7 +291,8 @@ public class CropVideoActivity extends BaseActivity {
                 tvInfo.append("压缩中...\n");
                 final long startTime = System.currentTimeMillis();
                 isCompressing = true;
-                new LocalMediaCompress(Environment.getExternalStorageDirectory() + "/dinpay/cache/", config).startCompressAsyn((ret, mediaObject) -> runOnUiThread(() -> {
+                FFmpegBridge.setLogEnable(true);
+                new LocalMediaCompress(Environment.getExternalStorageDirectory() + "/demo/", config).startCompressAsyn((ret, mediaObject) -> runOnUiThread(() -> {
                     isCompressing = false;
                     tvInfo.append("压缩结束\n");
                     tvInfo.append(String.format(Locale.CHINA, "压缩后大小：%.2f mb", new File(mediaObject.getOutputTempTranscodingVideoPath()).length() / 1024f / 1024f));

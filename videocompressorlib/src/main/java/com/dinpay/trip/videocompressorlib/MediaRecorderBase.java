@@ -75,7 +75,7 @@ public abstract class MediaRecorderBase {
     }
 
 
-    protected Boolean doCompress(boolean mergeFlag) {
+    protected Boolean doCompress(boolean mergeFlag, String logPath) {
         if (compressConfig != null) {
             String vbr = " -vbr 4 ";
             if (compressConfig != null && compressConfig.getMode() == BaseMediaBitrateConfig.MODE.CBR) {
@@ -103,13 +103,13 @@ public abstract class MediaRecorderBase {
 //                    Log.e("DEMO", "onExecuted: " + ret);
 //                }
 //            });
-            boolean transcodingFlag = FFmpegBridge.jxFFmpegCMDRun(cmd_transcoding) == 0;
-            boolean captureFlag = FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempTranscodingVideoPath(), mMediaObject.getOutputVideoThumbPath(), String.valueOf(CAPTURE_THUMBNAILS_TIME));
+            boolean transcodingFlag = FFmpegBridge.jxFFmpegCMDRun(cmd_transcoding, logPath) == 0;
+            boolean captureFlag = FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempTranscodingVideoPath(), mMediaObject.getOutputVideoThumbPath(), String.valueOf(CAPTURE_THUMBNAILS_TIME), logPath);
             FileUtils.deleteCacheFile(mMediaObject.getOutputDirectory());
             boolean result = mergeFlag && captureFlag && transcodingFlag;
             return result;
         } else {
-            boolean captureFlag = FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempVideoPath(), mMediaObject.getOutputVideoThumbPath(), String.valueOf(CAPTURE_THUMBNAILS_TIME));
+            boolean captureFlag = FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempVideoPath(), mMediaObject.getOutputVideoThumbPath(), String.valueOf(CAPTURE_THUMBNAILS_TIME), logPath);
 
             FileUtils.deleteCacheFile2TS(mMediaObject.getOutputDirectory());
             boolean result = captureFlag && mergeFlag;
@@ -117,7 +117,7 @@ public abstract class MediaRecorderBase {
             return result;
         }
     }
-    protected void doCompressAsyn(boolean mergeFlag, FFmpegBridge.OnExecListener listener) {
+    protected void doCompressAsyn(String logPath, FFmpegBridge.OnExecListener listener) {
         if (compressConfig != null) {
             String vbr = " -vbr 4 ";
             if (compressConfig.getMode() == BaseMediaBitrateConfig.MODE.CBR) {
@@ -139,7 +139,7 @@ public abstract class MediaRecorderBase {
                     scaleWH,
                     mMediaObject.getOutputTempTranscodingVideoPath()
             );
-            FFmpegBridge.exec(cmd_transcoding, listener);
+            FFmpegBridge.exec(cmd_transcoding, logPath, listener);
 //            boolean transcodingFlag = FFmpegBridge.jxFFmpegCMDRun(cmd_transcoding) == 0;
 //            boolean captureFlag = FFMpegUtils.captureThumbnails(mMediaObject.getOutputTempTranscodingVideoPath(), mMediaObject.getOutputVideoThumbPath(), String.valueOf(CAPTURE_THUMBNAILS_TIME));
 //            FileUtils.deleteCacheFile(mMediaObject.getOutputDirectory());

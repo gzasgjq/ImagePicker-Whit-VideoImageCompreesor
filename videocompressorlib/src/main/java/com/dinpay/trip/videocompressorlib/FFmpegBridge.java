@@ -1,7 +1,6 @@
 package com.dinpay.trip.videocompressorlib;
 
 
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -16,6 +15,7 @@ import java.io.IOException;
 public class FFmpegBridge {
 
     private static final String TAG = "FFmpegBridge";
+    private static boolean logEnable = false;
 
     static {
         System.loadLibrary("avutil");
@@ -84,15 +84,20 @@ public class FFmpegBridge {
      *
      * @param cmd
      */
-    public static int jxFFmpegCMDRun(String cmd) {
+    public static int jxFFmpegCMDRun(String cmd, String logPath) {
         String regulation = "[ \\t]+";
         final String[] split = cmd.split(regulation);
-        initLog();
+        initLog(logPath);
         return jxCMDRun(split);
     }
 
-    private static void initLog() {
-        String logUrl = Environment.getExternalStorageDirectory().getAbsolutePath() + "/log.txt";
+    public static void setLogEnable(boolean logEnable) {
+        FFmpegBridge.logEnable = logEnable;
+    }
+
+    private static void initLog(String logPath) {
+        if (logPath == null || !logEnable) return;
+        String logUrl = logPath + "/log.txt";
         File file = new File(logUrl);
         if (!file.exists()) {
             try {
@@ -124,11 +129,11 @@ public class FFmpegBridge {
      * @param cmds
      * @param listener
      */
-    public static void exec(String cmds, OnExecListener listener) {
+    public static void exec(String cmds, String logPath, OnExecListener listener) {
         String regulation = "[ \\t]+";
         final String[] split = cmds.split(regulation);
         FFmpegBridge.listener = listener;
-        initLog();
+        initLog(logPath);
         exec(split.length, split);
     }
 
