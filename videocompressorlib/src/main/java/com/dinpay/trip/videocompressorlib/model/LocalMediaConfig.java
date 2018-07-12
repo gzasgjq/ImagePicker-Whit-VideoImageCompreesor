@@ -1,5 +1,6 @@
 package com.dinpay.trip.videocompressorlib.model;
 
+import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,7 +38,6 @@ public final class LocalMediaConfig implements Parcelable {
         this.videoAddress = buidler.videoPath;
         this.scale = buidler.scale;
         this.GO_HOME = buidler.GO_HOME;
-
     }
 
 

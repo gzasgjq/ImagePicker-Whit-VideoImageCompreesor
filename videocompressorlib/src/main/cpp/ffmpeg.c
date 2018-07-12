@@ -595,8 +595,21 @@ static void ffmpeg_cleanup(int ret) {
     } else if (ret && transcode_init_done) {
         av_log(NULL, AV_LOG_INFO, "Conversion failed!\n");
     }
+
+    nb_filtergraphs = 0;
+    nb_output_files = 0;
+    nb_output_streams = 0;
+    nb_input_files = 0;
+    nb_input_streams = 0;
+    progress_avio = NULL;
+    input_streams = NULL;
+    input_files = NULL;
+    output_streams = NULL;
+    output_files = NULL;
+
     term_exit();
     ffmpeg_exited = 1;
+
     LOGI(JNI_DEBUG, "清理完成");
 
 }
@@ -3705,7 +3718,7 @@ static void set_tty_echo(int on) {
 static int check_keyboard_interaction(int64_t cur_time) {
     int i, ret, key;
     static int64_t last_time;
-    if (received_nb_signals || ffmpeg_exited)
+    if (received_nb_signals)
         return AVERROR_EXIT;
     /* read_key() returns 0 on EOF */
     if (cur_time - last_time >= 100000 && !run_as_daemon) {
@@ -4651,28 +4664,13 @@ int jxRun(int argc, char **argv) {
 
     exit_program(received_nb_signals ? 255 : main_return_code);
 
-    nb_filtergraphs = 0;
-    nb_input_streams = 0;
-    nb_input_files = 0;
-    progress_avio = NULL;
-
-
-    input_streams = NULL;
-    nb_input_streams = 0;
-    input_files = NULL;
-    nb_input_files = 0;
-
-    output_streams = NULL;
-    nb_output_streams = 0;
-    output_files = NULL;
-    nb_output_files = 0;
     LOGI(JNI_DEBUG, "命令结束");
 
     return main_return_code;
 }
 
 // todo 调用会崩溃，未完善
-int jxExit(){
+int jxExit() {
 //    ffmpeg_exited = 1;
 //    exit_program(received_nb_signals ? 255 : main_return_code);
 //    nb_filtergraphs = 0;

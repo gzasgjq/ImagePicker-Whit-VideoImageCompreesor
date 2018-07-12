@@ -1,9 +1,31 @@
 apply plugin: 'com.android.library'
+ext {
+    bintrayRepo = 'Maven'
+    bintrayName = 'DyVideoCompressor'
+
+    publishedGroupId = 'com.dinpay.trip.videocompressorlib'
+    libraryName = 'videocompressorlib'
+    artifact = 'videocompressorlib'
+
+    libraryDescription = 'A Video Compresser use FFmpeg on Android'
+    libraryVersionDescription = '添加自定义输出路径功能'
+
+    siteUrl = 'https://github.com/gzasgjq/TestDemo/tree/Sim'
+    gitUrl = 'https://github.com/gzasgjq/TestDemo.git'
+
+    libraryVersion = '0.2'
+
+    developerId = 'gzasgjq'
+    developerName = 'Nin Jacky'
+    developerEmail = 'gzasgjq@hotmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 26
-
-
 
     defaultConfig {
         minSdkVersion 17
@@ -35,14 +57,21 @@ android {
             path "CMakeLists.txt"
         }
     }
+
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
 }
+
+tasks.withType(JavaCompile) {
+    options.encoding = "utf-8"
+}
+
+apply from: 'installv1.gradle'
+apply from: 'bintrayv1.gradle'

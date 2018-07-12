@@ -75,7 +75,7 @@ dependencies {
     implementation 'com.dhh:websocket2:1.5.0'
     implementation 'com.dhh:rxlifecycle2:1.6'
     implementation project(':cropvideo')
-    implementation project(':smallvideolib')
+    implementation project(':videocompressorlib')
 
     implementation 'com.tencent.xinge:xinge:3.2.2-release'
     //wup包

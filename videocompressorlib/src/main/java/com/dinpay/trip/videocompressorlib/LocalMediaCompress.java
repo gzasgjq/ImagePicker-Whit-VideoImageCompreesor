@@ -1,5 +1,6 @@
 package com.dinpay.trip.videocompressorlib;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -29,8 +30,14 @@ public class LocalMediaCompress extends MediaRecorderBase {
     private final OnlyCompressOverBean mOnlyCompressOverBean;
     private final LocalMediaConfig localMediaConfig;
     protected String scaleWH = "";
+    private final String videoOutputAddress;
 
-    public LocalMediaCompress(LocalMediaConfig localMediaConfig) {
+    public LocalMediaCompress(Context context, LocalMediaConfig localMediaConfig) {
+        this(context.getCacheDir() + "/videoCompressor/", localMediaConfig);
+    }
+
+    public LocalMediaCompress(String outputPath, LocalMediaConfig localMediaConfig) {
+        videoOutputAddress = outputPath;
         this.localMediaConfig = localMediaConfig;
         compressConfig = localMediaConfig.getCompressConfig();
         CAPTURE_THUMBNAILS_TIME = localMediaConfig.getCaptureThumbnailsTime();
@@ -40,7 +47,6 @@ public class LocalMediaCompress extends MediaRecorderBase {
         mNeedCompressVideo = localMediaConfig.getVideoPath();
         mOnlyCompressOverBean = new OnlyCompressOverBean();
         mOnlyCompressOverBean.setVideoPath(mNeedCompressVideo);
-
     }
 
     private String getScaleWH(String videoPath, float scale) {
@@ -60,11 +66,11 @@ public class LocalMediaCompress extends MediaRecorderBase {
             newsrcW += 1;
         }
         if (s.equals("90") || s.equals("270")) {
-            return String.format("%dx%d", newsrcH,newsrcW);
+            return String.format("%dx%d", newsrcH, newsrcW);
 
         } else if (s.equals("0") || s.equals("180") || s.equals("360")) {
             return String.format("%dx%d", newsrcW, newsrcH);
-        }else {
+        } else {
             return "";
         }
     }
@@ -135,23 +141,20 @@ public class LocalMediaCompress extends MediaRecorderBase {
         return f.toString();
     }
 
-    public interface OnExecOverListener{
+    public interface OnExecOverListener {
         void onOver(int ret, MediaObject mediaObject);
     }
 
-    public void startCompressAsyn(final OnExecOverListener onExecListener){
+    public void startCompressAsyn(final OnExecOverListener onExecListener) {
         if (TextUtils.isEmpty(mNeedCompressVideo)) {
             return;
         }
-        File f = new File(Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/mabeijianxi/");
+        File f = new File(videoOutputAddress);
         if (!FileUtils.checkFile(f)) {
             f.mkdirs();
         }
         String key = String.valueOf(System.currentTimeMillis());
-        mMediaObject = setOutputDirectory(key,
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/mabeijianxi/" + key);
+        mMediaObject = setOutputDirectory(key,videoOutputAddress + key);
 
         mMediaObject.setOutputTempVideoPath(mNeedCompressVideo);
 
@@ -173,15 +176,12 @@ public class LocalMediaCompress extends MediaRecorderBase {
             return mOnlyCompressOverBean;
         }
 
-        File f = new File(Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/mabeijianxi/");
+        File f = new File(videoOutputAddress);
         if (!FileUtils.checkFile(f)) {
             f.mkdirs();
         }
         String key = String.valueOf(System.currentTimeMillis());
-        mMediaObject = setOutputDirectory(key,
-                Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/mabeijianxi/" + key);
+        mMediaObject = setOutputDirectory(key,videoOutputAddress + key);
 
         mMediaObject.setOutputTempVideoPath(mNeedCompressVideo);
 

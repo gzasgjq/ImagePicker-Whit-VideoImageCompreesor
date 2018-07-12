@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include "jx_ffmpeg_thread.h"
+#include "jx_log.h"
 
 pthread_t ntid;
 char **argvs = NULL;
@@ -8,6 +9,7 @@ int num=0;
 
 void *thread(void *arg)
 {   //执行
+    LOGE(JNI_DEBUG, "thread running");
     int result = jxRun(num, argvs);
     return ((void *)0);
 }
@@ -21,7 +23,7 @@ int ffmpeg_thread_run_cmd(int cmdnum,char **argv){
     int temp =pthread_create(&ntid,NULL,thread,NULL);
     if(temp!=0)
     {
-        //LOGE("can't create thread: %s ",strerror(temp));
+        LOGE(JNI_DEBUG, "can't create thread: %s ",strerror(temp));
         return 1;
     }
     return 0;
@@ -38,6 +40,7 @@ void ffmpeg_thread_callback(void (*cb)(int ret)){
  * 退出线程
  */
 void ffmpeg_thread_exit(int ret){
+    LOGE(JNI_DEBUG, "ffmpeg_thread_exit");
     if (ffmpeg_callback) {
         ffmpeg_callback(ret);
     }

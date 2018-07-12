@@ -1,1 +1,1 @@
-include ':app', ':cropvideo', ':smallvideolib'
+include ':app', ':cropvideo', ':videocompressorlib'

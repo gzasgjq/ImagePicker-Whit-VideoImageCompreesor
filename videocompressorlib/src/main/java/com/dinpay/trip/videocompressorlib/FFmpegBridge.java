@@ -87,6 +87,11 @@ public class FFmpegBridge {
     public static int jxFFmpegCMDRun(String cmd) {
         String regulation = "[ \\t]+";
         final String[] split = cmd.split(regulation);
+        initLog();
+        return jxCMDRun(split);
+    }
+
+    private static void initLog() {
         String logUrl = Environment.getExternalStorageDirectory().getAbsolutePath() + "/log.txt";
         File file = new File(logUrl);
         if (!file.exists()) {
@@ -97,7 +102,6 @@ public class FFmpegBridge {
             }
         }
         initJXFFmpeg(true, file.getAbsolutePath());
-        return jxCMDRun(split);
     }
 
     private static OnExecListener listener;
@@ -124,6 +128,7 @@ public class FFmpegBridge {
         String regulation = "[ \\t]+";
         final String[] split = cmds.split(regulation);
         FFmpegBridge.listener = listener;
+        initLog();
         exec(split.length, split);
     }
 

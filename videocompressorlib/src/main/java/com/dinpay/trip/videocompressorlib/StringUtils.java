@@ -25,8 +25,7 @@ public class StringUtils {
 	private static final double KB = 1024.0;
 	private static final double MB = 1048576.0;
 	private static final double GB = 1073741824.0;
-	public static final SimpleDateFormat DATE_FORMAT_PART = new SimpleDateFormat(
-			"HH:mm");
+	public static final SimpleDateFormat DATE_FORMAT_PART = new SimpleDateFormat("HH:mm");
 
 	public static String currentTimeString() {
 		return DATE_FORMAT_PART.format(Calendar.getInstance().getTime());

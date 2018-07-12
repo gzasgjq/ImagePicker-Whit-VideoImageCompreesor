@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.dinpay.trip.cropvideo.tools.VideoUtils;
 import com.dinpay.trip.videocompressorlib.FFmpegBridge;
 import com.dinpay.trip.videocompressorlib.LocalMediaCompress;
@@ -276,7 +278,7 @@ public class CropVideoActivity extends BaseActivity {
                 String videoHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
                 float scale = Math.min(Float.parseFloat(videoWidth), Float.parseFloat(videoHeight)) / 540f;
                 LocalMediaConfig.Buidler buidler = new LocalMediaConfig.Buidler();
-                final LocalMediaConfig config = buidler
+                LocalMediaConfig config = buidler
                         .setVideoPath(_data)
                         .setFramerate(30)
                         .captureThumbnailsTime(1)
@@ -289,7 +291,7 @@ public class CropVideoActivity extends BaseActivity {
                 tvInfo.append("压缩中...\n");
                 final long startTime = System.currentTimeMillis();
                 isCompressing = true;
-                new LocalMediaCompress(config).startCompressAsyn((ret, mediaObject) -> runOnUiThread(() -> {
+                new LocalMediaCompress(Environment.getExternalStorageDirectory() + "/dinpay/cache/", config).startCompressAsyn((ret, mediaObject) -> runOnUiThread(() -> {
                     isCompressing = false;
                     tvInfo.append("压缩结束\n");
                     tvInfo.append(String.format(Locale.CHINA, "压缩后大小：%.2f mb", new File(mediaObject.getOutputTempTranscodingVideoPath()).length() / 1024f / 1024f));
