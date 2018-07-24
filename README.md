@@ -1,4 +1,4 @@
-# ImagePicker-Whit-VideoImageCompreesor
+# ImagePicker-With-VideoImageCompreesor
 
 @(视频压缩)[ffmpeg|多媒体选择|视频裁剪（开发中）|增量更新]
 
@@ -6,6 +6,7 @@
 
 自己修改/常用的库集合，包含：
 
+## Libraries
 - **视频压缩** [VideoCompressorLib](videocompressorlib/README.md) 
 使用精简的FFmpeg库对视频文件进行转码，添加了*AAC*和*X264*的支持
 

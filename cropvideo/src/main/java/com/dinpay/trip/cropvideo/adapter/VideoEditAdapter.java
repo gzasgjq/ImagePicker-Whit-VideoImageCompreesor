@@ -15,16 +15,6 @@ import com.dinpay.trip.cropvideo.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * ================================================
- * 作    者：顾修忠-guxiuzhong@youku.com/gfj19900401@163.com
- * 版    本：
- * 创建日期：2017/3/2-下午7:46
- * 描    述：
- * 修订历史：
- * ================================================
- */
-
 public class VideoEditAdapter extends RecyclerView.Adapter {
     private List<String> lists = new ArrayList<>();
     private LayoutInflater inflater;

@@ -20,16 +20,6 @@ import com.dinpay.trip.cropvideo.R;
 
 import java.text.DecimalFormat;
 
-
-/**
- * ================================================
- * 作    者：顾修忠-guxiuzhong@youku.com/gfj19900401@163.com
- * 版    本：
- * 创建日期：2017/4/4-下午1:22
- * 描    述：
- * 修订历史：
- * ================================================
- */
 public class RangeSeekBar extends View {
     private static final String TAG = RangeSeekBar.class.getSimpleName();
     private double absoluteMinValuePrim, absoluteMaxValuePrim;
