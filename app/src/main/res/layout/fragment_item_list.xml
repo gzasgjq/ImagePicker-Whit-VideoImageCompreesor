@@ -12,5 +12,5 @@
     app:layoutManager="LinearLayoutManager"
     app:spanCount="3"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.dinpay.trip.testdemo.fragments.ItemFragment"
+    tools:context="com.gjq.demo.demo.fragments.ItemFragment"
     tools:listitem="@layout/fragment_item"/>

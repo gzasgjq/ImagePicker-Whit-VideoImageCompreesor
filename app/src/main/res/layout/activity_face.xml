@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activites.FaceActivity">
 
-    <com.dinpay.trip.testdemo.commom.FaceView
+    <com.gjq.demo.demo.commom.FaceView
         android:id="@+id/face_view"
         android:layout_gravity="center"
         android:layout_width="300dp"

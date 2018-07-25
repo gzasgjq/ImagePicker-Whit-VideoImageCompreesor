@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.dinpay.trip.testdemo.activites.WebSocketActivity">
+    tools:context="com.gjq.demo.demo.activites.WebSocketActivity">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/input_socket_url_hint"

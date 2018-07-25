@@ -1,7 +1,6 @@
 package com.lzy.imagepicker.ui;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,12 +32,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.Scheduler;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -184,6 +181,7 @@ public class ImageBaseActivity extends AppCompatActivity {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new SingleObserver<List<MediaObject>>() {
                             Disposable disposable;
+
                             @Override
                             public void onSubscribe(Disposable disposable) {
                                 this.disposable = disposable;
@@ -280,9 +278,9 @@ public class ImageBaseActivity extends AppCompatActivity {
     private boolean checkFile(String outputPath) {
         if (TextUtils.isEmpty(outputPath)) return false;
         File file = new File(outputPath);
-        if (file.exists()){
+        if (file.exists()) {
             return file.canWrite();
-        }else {
+        } else {
             return file.mkdirs();
         }
     }
@@ -295,7 +293,7 @@ public class ImageBaseActivity extends AppCompatActivity {
 
     }
 
-    protected void setResultFinish(ArrayList<ImageItem> mImageItems){
+    protected void setResultFinish(ArrayList<ImageItem> mImageItems) {
         Intent intent = new Intent();
         intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, mImageItems);
         setResult(ImagePicker.RESULT_CODE_ITEMS, intent);   //单选不需要裁剪，返回数据
