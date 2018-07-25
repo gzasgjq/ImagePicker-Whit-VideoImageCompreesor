@@ -20,14 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.bumptech.glide.Glide;
 import com.dinpay.trip.cropvideo.tools.VideoUtils;
+import com.dinpay.trip.testdemo.R;
 import com.dinpay.trip.videocompressorlib.FFmpegBridge;
 import com.dinpay.trip.videocompressorlib.LocalMediaCompress;
 import com.dinpay.trip.videocompressorlib.model.BaseMediaBitrateConfig;
 import com.dinpay.trip.videocompressorlib.model.LocalMediaConfig;
 import com.dinpay.trip.videocompressorlib.model.VBRMode;
-import com.dinpay.trip.testdemo.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -292,15 +291,16 @@ public class CropVideoActivity extends BaseActivity {
                 final long startTime = System.currentTimeMillis();
                 isCompressing = true;
                 FFmpegBridge.setLogEnable(true);
-                new LocalMediaCompress(Environment.getExternalStorageDirectory() + "/demo/", config).startCompressAsyn((ret, mediaObject) -> runOnUiThread(() -> {
-                    isCompressing = false;
-                    tvInfo.append("压缩结束\n");
-                    tvInfo.append(String.format(Locale.CHINA, "压缩后大小：%.2f mb", new File(mediaObject.getOutputTempTranscodingVideoPath()).length() / 1024f / 1024f));
-                    tvInfo.append(String.format(Locale.CHINA, "耗时：%s\n", (System.currentTimeMillis() - startTime) / 1000));
-                    videoView.setVideoPath(mediaObject.getOutputTempTranscodingVideoPath());
-                    videoView.start();
-                    tvInfo.append("filePath: " + mediaObject.getOutputTempTranscodingVideoPath() + "\n");
-                }));
+                new LocalMediaCompress(Environment.getExternalStorageDirectory() + "/demo/", config)
+                        .startCompressAsyn((ret, mediaObject) -> runOnUiThread(() -> {
+                            isCompressing = false;
+                            tvInfo.append("压缩结束\n");
+                            tvInfo.append(String.format(Locale.CHINA, "压缩后大小：%.2f mb", new File(mediaObject.getOutputTempTranscodingVideoPath()).length() / 1024f / 1024f));
+                            tvInfo.append(String.format(Locale.CHINA, "耗时：%s\n", (System.currentTimeMillis() - startTime) / 1000));
+                            videoView.setVideoPath(mediaObject.getOutputTempTranscodingVideoPath());
+                            videoView.start();
+                            tvInfo.append("filePath: " + mediaObject.getOutputTempTranscodingVideoPath() + "\n");
+                        }));
 //                new Thread(new Runnable() {
 //
 //                    @Override

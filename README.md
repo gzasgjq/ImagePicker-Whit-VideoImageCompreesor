@@ -7,10 +7,10 @@
 自己修改/常用的库集合，包含：
 
 ## Libraries
-- **视频压缩** [VideoCompressorLib](videocompressorlib/README.md) 
+- **视频压缩** [VideoCompressorLib](videocompressorlib) 
 使用精简的FFmpeg库对视频文件进行转码，添加了*AAC*和*X264*的支持
 
-- **本地媒体选择器** [ImagePicker](imagepicker/README.md)
+- **本地媒体选择器** [ImagePicker](imagepicker)
 基于<https://github.com/jeasonlzy/ImagePicker>修改而来的本地媒体选择器，添加了视频选择支持以及本地视频压缩功能
 
 - **视频裁剪(开发中)** [CropVideo](cropvideo)
