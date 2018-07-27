@@ -46,7 +46,7 @@ static void ffmpeg_callback(int ret) {
 }
 
 JNIEXPORT jint JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_exec(JNIEnv *env, jclass clazz, jint cmdnum, jobjectArray cmdline){
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_exec(JNIEnv *env, jclass clazz, jint cmdnum, jobjectArray cmdline){
     //---------------------------------C语言 反射Java 相关----------------------------------------
     //在jni的c线程中不允许使用共用的env环境变量 但JavaVM在整个jvm中是共用的 可通过保存JavaVM指针,到时候再通过JavaVM指针取出JNIEnv *env;
     //ICS之前(你可把NDK sdk版本改成低于11) 可以直接写m_clazz = clazz;直接赋值,  然而ICS(sdk11) 后便改变了这一机制,在线程中回调java时 不能直接共用变量 必须使用NewGlobalRef创建全局对象
@@ -82,14 +82,14 @@ Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_exec(JNIEnv *env, jclass cl
  * 以命令行方式运行，返回0表示成功
  */
 JNIEXPORT void JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_jxCMDExit(JNIEnv *env, jclass type){
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_jxCMDExit(JNIEnv *env, jclass type){
 //    term_exit();
     jxExit();
 //    ffmpeg_thread_exit(1);
 }
 
 JNIEXPORT jint JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_jxCMDRun(JNIEnv *env, jclass type,
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_jxCMDRun(JNIEnv *env, jclass type,
         jobjectArray commands){
     int argc = (*env)->GetArrayLength(env,commands);
     char *argv[argc];
@@ -111,7 +111,7 @@ char *logUrl;
  * 初始化debug工具
  */
 JNIEXPORT void JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_initJXFFmpeg(JNIEnv *env, jclass type,
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_initJXFFmpeg(JNIEnv *env, jclass type,
                                                                            jboolean debug,
                                                                            jstring logUrl_) {
     JNI_DEBUG = debug;

@@ -16,7 +16,8 @@
 - **视频裁剪(开发中)** [CropVideo](cropvideo)
 本地视频裁剪库（使用*isoviewer*）
 
-- **增量更新** 
+- **增量更新(开发中)** [DeltaUpdateLib](deltaupdatelib)
+使用BSDiff差分算法实现的增量更新库
 
 ## Licenses
 ```

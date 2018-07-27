@@ -1,1 +1,1 @@
-include ':app', ':cropvideo', ':videocompressorlib', 'imagepicker'
+include ':app', ':cropvideo', ':videocompressorlib', ':deltaupdatelib', 'imagepicker'

@@ -9,17 +9,17 @@
 #include <jni.h>
 
 JNIEXPORT jint JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_exec(JNIEnv *env, jclass clazz, jint cmdnum, jobjectArray cmdline);
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_exec(JNIEnv *env, jclass clazz, jint cmdnum, jobjectArray cmdline);
 
 JNIEXPORT jint JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_jxCMDRun(JNIEnv *env, jclass type,
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_jxCMDRun(JNIEnv *env, jclass type,
                                                                        jobjectArray commands);
 
 void log_callback(void* ptr, int level, const char* fmt,
                             va_list vl);
 
 JNIEXPORT void JNICALL
-Java_com_dinpay_trip_videocompressorlib_FFmpegBridge_initJXFFmpeg(JNIEnv *env, jclass type,
+Java_com_gjq_demo_videocompressorlib_FFmpegBridge_initJXFFmpeg(JNIEnv *env, jclass type,
         jboolean debug,
 jstring logUrl_);
 

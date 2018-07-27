@@ -1,6 +1,9 @@
 # VideoCompressorLib
 基于**FFmpeg**的视频压缩库，压缩质量与微信方案相当，可自定义压缩参数，提供全平台SO支持
 
+**！！！仅支持AVC格式的视频流！！！**
+**！！！部分高帧率或4K视频可能不受支持！！！**
+
 [ ![Download](https://api.bintray.com/packages/gzasgjq/Maven/DyVideoCompressor/images/download.svg) ](https://bintray.com/gzasgjq/Maven/DyVideoCompressor/_latestVersion)
 
 FFmpeg版本：3.2.5
@@ -187,7 +190,7 @@ Observable.fromIterable(compressVideos)
 与微信对比测试结果大致如下
 <table><tbody>
 <tr>
-        <th colspan="4">ARM64</th>
+        <th colspan="4">ARMv7</th>
         </tr>
     <tr>
         <th>视频文件</th>
@@ -196,25 +199,24 @@ Observable.fromIterable(compressVideos)
         <th>耗时</th>
     </tr>
     <tr>
-        <td>源文件</td>
-        <td>23s</td>
-        <td>47.6mb</td>
+        <td>源文件(720P)</td>
+        <td>5s</td>
+        <td>5.55mb</td>
         <td> </td>
     </tr>
     <tr>
-        <td>微信</td>
-        <td>10s</td>
-        <td>2.01mb</td>
-        <td>56s</td>
+        <td>微信(540*960)</td>
+        <td>5s</td>
+        <td>1.22mb</td>
+        <td>25s</td>
     </tr>
     <tr>
-        <td>VideoCompressorLib</td>
-        <td>23s</td>
-        <td>5.44mb</td>
-        <td>76s</td>
+        <td>VideoCompressorLib(540*960)</td>
+        <td>5s</td>
+        <td>1.33mb</td>
+        <td>29s</td>
     </tr>
 </table>
-同等质量和压缩体积的情况下，速度会比微信的慢，后期再慢慢优化吧 :disappointed:
 
 ## 3.    Simple
 [VideoCompressorLib](/video/Final_Meizu.mp4)
