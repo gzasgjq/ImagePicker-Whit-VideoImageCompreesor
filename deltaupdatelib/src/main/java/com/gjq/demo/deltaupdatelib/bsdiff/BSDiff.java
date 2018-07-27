@@ -13,7 +13,7 @@ import java.util.zip.GZIPOutputStream;
 /**
  * 创建人：gjq-t239
  * 创建时间：2018/07/25 11:39
- * 类描述：$INTRO$
+ * 类描述：差分工具类
  * <p>
  * 修改人：
  * 修改时间：

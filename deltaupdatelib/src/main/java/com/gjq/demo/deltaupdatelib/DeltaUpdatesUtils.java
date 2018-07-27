@@ -2,25 +2,18 @@ package com.gjq.demo.deltaupdatelib;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.os.Environment;
-import android.text.TextUtils;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.gjq.demo.deltaupdatelib.bsdiff.BSPatch;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.BuildConfig;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * 创建人：gjq-t239
@@ -32,41 +25,86 @@ import io.reactivex.schedulers.Schedulers;
  * 修改备注：
  */
 public class DeltaUpdatesUtils {
-    private static final String patchsDir = Environment.getExternalStorageDirectory() + "/dinpay/apk/patchs/";
-    private static final String patchedApkDir = Environment.getExternalStorageDirectory() + "/dinpay/apk/patched/";
     private static final String TAG = "DeltaUpdatesUtils";
 
-    public static void checkUpdate(Context context) {
-//        checkPermission(context);
-        Single.create((SingleOnSubscribe<File>) e -> {
-            File patchsDirFile = new File(patchsDir);
-            if (!patchsDirFile.exists()) {
-                patchsDirFile.mkdirs();
+    public static File patchFile(Context context, File patch) {
+        return patchFile(context, patch, null);
+    }
+
+    public static void patchFileAsyn(Context context, File patch, PatchApkListener listener) {
+        patchFileAsyn(context, patch, null, listener);
+    }
+
+    public static Observable<File> patchFileRx(Context context, File patch) {
+        return patchFileRx(context, patch, null);
+    }
+
+    /**
+     * 合并生成Apk包，同步方法
+     *
+     * @param context context
+     * @param patch   差分包
+     * @param md5   Apk的MD5
+     * @return 生成的Apk文件
+     */
+    public static File patchFile(Context context, File patch, String md5) {
+        if (!patch.canRead()) {
+            Toast.makeText(context, "差分包不可访问", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        if (Long.parseLong(patch.getName()) <= BuildConfig.VERSION_CODE) {
+            Toast.makeText(context, "差分包版本不是最新", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
+        String apkPath = applicationInfo.sourceDir;
+        Log.d(TAG, "Current APK file is " + apkPath);
+        File currentApk = new File(apkPath);
+        if (currentApk.exists() && currentApk.canRead()) {
+            Log.i(TAG, "loading file");
+        } else {
+            Log.e(TAG, "file is not readable");
+            return null;
+        }
+        File patchedApk = new File(context.getCacheDir().getAbsolutePath() + System.currentTimeMillis() + ".apk");
+        if (!patchedApk.getParentFile().exists())
+            patchedApk.getParentFile().mkdirs();
+        try {
+            if (!patchedApk.exists()) {
+                patchedApk.createNewFile();
             }
-            File[] patchs = patchsDirFile.listFiles();
-            if (patchs.length <= 0) {
-                Log.e(TAG, "No Patch Find");
+            BSPatch.patchFast(currentApk, patchedApk, patch, 0);
+            if (md5 != null && !md5.equals(MD5Utils.encode(patchedApk))){
+                Toast.makeText(context, "文件校验失败", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        } catch (IOException exce) {
+            Toast.makeText(context, "合成失败", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "patchFile: ", exce);
+            return null;
+        }
+        Log.d(TAG, MD5Utils.encode(patchedApk));
+        return patchedApk;
+    }
+
+    /**
+     * 合成Apk包，异步方法
+     *  @param context  context
+     * @param patch    差分包
+     * @param md5   Apk的MD5
+     * @param listener 回调
+     */
+    public static void patchFileAsyn(Context context, File patch, String md5, PatchApkListener listener) {
+        Handler handler = new Handler();
+        new Thread(() -> {
+            if (!patch.canRead()) {
+                handler.post(() -> listener.onPatchFail("差分包不可访问"));
                 return;
             }
-            Arrays.sort(patchs, (o1, o2) -> {
-                if (TextUtils.isDigitsOnly(o1.getName()) && TextUtils.isDigitsOnly(o2.getName())) {
-                    long o1time = Long.parseLong(o1.getName());
-                    long o2time = Long.parseLong(o2.getName());
-                    if (o1time > o2time)
-                        return 1;
-                    else if (o1time == o2time)
-                        return 0;
-                    else
-                        return -1;
-                }
-                return -1;
-            });
-            File patch = patchs[0];
-            Log.i(TAG, "Choose patch is " + patch.getAbsolutePath());
             if (Long.parseLong(patch.getName()) <= BuildConfig.VERSION_CODE) {
-
+                handler.post(() -> listener.onPatchFail("差分包版本不是最新"));
+                return;
             }
-
             ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
             String apkPath = applicationInfo.sourceDir;
             Log.d(TAG, "Current APK file is " + apkPath);
@@ -74,89 +112,43 @@ public class DeltaUpdatesUtils {
             if (currentApk.exists() && currentApk.canRead()) {
                 Log.i(TAG, "loading file");
             } else {
+                handler.post(() -> listener.onPatchFail("file is not readable"));
                 Log.e(TAG, "file is not readable");
                 return;
             }
-            File patchedApk = new File(patchedApkDir + System.currentTimeMillis() + ".apk");
+            File patchedApk = new File(context.getCacheDir().getAbsolutePath() + System.currentTimeMillis() + ".apk");
             if (!patchedApk.getParentFile().exists())
                 patchedApk.getParentFile().mkdirs();
-            if (!patchedApk.exists()) {
-                patchedApk.createNewFile();
+            try {
+                if (!patchedApk.exists()) {
+                    patchedApk.createNewFile();
+                }
+                BSPatch.patchFast(currentApk, patchedApk, patch, 0);
+                if (md5 != null && !md5.equals(MD5Utils.encode(patchedApk))){
+                    handler.post(() -> listener.onPatchFail("文件校验失败"));
+                    return;
+                }
+            } catch (IOException exce) {
+                Log.e(TAG, "patchFile: ", exce);
+                handler.post(() -> listener.onPatchFail("合成失败"));
+                return;
             }
-            BSPatch.patchFast(currentApk, patchedApk, patch, 0);
-            e.onSuccess(patchedApk);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<File>() {
-                    private Disposable d;
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        this.d = d;
-                    }
-
-                    @Override
-                    public void onSuccess(File r) {
-//                        ApkUpdateUtils.installApp(context, r);
-                        d.dispose();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "Patch Fail: " + e);
-                        e.printStackTrace();
-                        d.dispose();
-                    }
-                });
+            Log.d(TAG, MD5Utils.encode(patchedApk));
+            handler.post(() -> listener.onPatchSuccess(patchedApk));
+        }).start();
     }
 
-//    @TargetApi(Build.VERSION_CODES.O)
-//    private static boolean checkPermission(Context context) {
-//        boolean haveInstallPermission;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            //先获取是否有安装未知来源应用的权限
-//            haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
-//            if (!haveInstallPermission) {//没有权限
-////                DialogUtils.showDialog(context, "安装应用需要打开未知来源权限，请去设置中开启权限",
-////                        new View.OnClickListener() {
-////                            @Override
-////                            public void onClick(View v) {
-////                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-////                                    startInstallPermissionSettingActivity();
-////                                }
-////                            }
-////                        }, null);
-//                return false;
-//            }
-//        }
-//        //有权限，开始安装应用程序
-//        installApk(apk);
-//        return true;
-//    }
-//
-//
-//    private static void startInstallPermissionSettingActivity(Context context) {
-////注意这个是8.0新API
-//        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-//        context.startActivityForResult(intent, 10086);
-//    }
-//
-//    //安装应用
-//    private static void installApk(File apk,Context context) {
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            intent.setDataAndType(Uri.fromFile(apk), "application/vnd.android.package-archive");
-//        } else {//Android7.0之后获取uri要用contentProvider
-//            Uri uri = FileProvider.getUriForFile(context, "com.dinpay.trip.fileprovider", appFile);
-//            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        }
-//
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        context.startActivity(intent);
-//    }
-
-    public static Observable<File> patchFile(File file, Context context) {
+    /**
+     * 合并生成Apk包，Rx
+     *
+     * @param context context
+     * @param file    差分包
+     * @param md5   Apk的MD5
+     * @return Observable return Apk File
+     */
+    public static Observable<File> patchFileRx(Context context, File file, String md5) {
+        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
+        String absolutePath = context.getCacheDir().getAbsolutePath();
         return new Observable<File>() {
             @Override
             protected void subscribeActual(Observer<? super File> e) {
@@ -168,7 +160,6 @@ public class DeltaUpdatesUtils {
                     e.onError(new IllegalArgumentException("差分包版本不是最新"));
                     return;
                 }
-                ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
                 String apkPath = applicationInfo.sourceDir;
                 Log.d(TAG, "Current APK file is " + apkPath);
                 File currentApk = new File(apkPath);
@@ -178,7 +169,7 @@ public class DeltaUpdatesUtils {
                     Log.e(TAG, "file is not readable");
                     return;
                 }
-                File patchedApk = new File(patchedApkDir + System.currentTimeMillis() + ".apk");
+                File patchedApk = new File(absolutePath + System.currentTimeMillis() + ".apk");
                 if (!patchedApk.getParentFile().exists())
                     patchedApk.getParentFile().mkdirs();
                 try {
@@ -186,6 +177,10 @@ public class DeltaUpdatesUtils {
                         patchedApk.createNewFile();
                     }
                     BSPatch.patchFast(currentApk, patchedApk, file, 0);
+                    if (md5 != null && !md5.equals(MD5Utils.encode(patchedApk))){
+                        e.onError(new SecurityException("文件校验失败"));
+                        return;
+                    }
                 } catch (IOException exce) {
                     e.onError(exce);
                     return;
@@ -194,34 +189,11 @@ public class DeltaUpdatesUtils {
                 e.onNext(patchedApk);
             }
         };
-//        return Single.create(e -> {
-//            if (!file.canRead()){
-//                e.tryOnError(new IOException("差分包不可访问"));
-//                return;
-//            }
-//            if (Long.parseLong(file.getName()) <= BuildConfig.VERSION_CODE){
-//                e.tryOnError(new IllegalArgumentException("差分包版本不是最新"));
-//                return;
-//            }
-//            ApplicationInfo applicationInfo = KuDouApplication.getGlobalContext().getApplicationInfo();
-//            String apkPath = applicationInfo.sourceDir;
-//            Log.d(TAG, "Current APK file is " + apkPath);
-//            File currentApk = new File(apkPath);
-//            if (currentApk.exists() && currentApk.canRead()) {
-//                Log.i(TAG, "loading file");
-//            } else {
-//                Log.e(TAG, "file is not readable");
-//                return;
-//            }
-//            File patchedApk = new File(patchedApkDir + System.currentTimeMillis() + ".apk");
-//            if (!patchedApk.getParentFile().exists())
-//                patchedApk.getParentFile().mkdirs();
-//            if (!patchedApk.exists()) {
-//                patchedApk.createNewFile();
-//            }
-//            BSPatch.patchFast(currentApk, patchedApk, file, 0);
-//            Log.d(TAG, MD5Utils.encode(patchedApk));
-//            e.onSuccess(patchedApk);
-//        });
+    }
+
+    interface PatchApkListener {
+        void onPatchSuccess(File apk);
+
+        void onPatchFail(String e);
     }
 }
