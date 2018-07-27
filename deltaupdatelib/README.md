@@ -4,6 +4,9 @@
 ## 1. 使用
 
 #### 1.1 生成差分包
+
+> 差分项目可参考另一个项目：[GDiffTool](https://github.com/gzasgjq/GDiffTool)
+
 差分工具下载：[DiffTool](diffTools/DiffTool.jar)
 
 使用：
